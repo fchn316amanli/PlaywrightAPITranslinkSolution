@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="TranslinkUI.ApiTests/TranslinkUI.ApiTests.csproj" />
+  <Project Path="TranslinkUI/TranslinkUI.csproj" />
+</Solution>
