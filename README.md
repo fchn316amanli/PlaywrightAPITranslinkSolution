@@ -55,9 +55,9 @@ with a clear PASS/FAIL result and meaningful messages
 
 assumptions and known issues
 ----------------------------
-Among GTFS Static of google_transit.zip downloaded from https://www.translink.ca/about-us/doing-business-with-translink/app-developer-resources/gtfs/gtfs-data
+1. Among GTFS Static of google_transit.zip downloaded from https://www.translink.ca/about-us/doing-business-with-translink/app-developer-resources/gtfs/gtfs-data
 routes.txt and route_names_exceptions.txt explain the route names and route Ids, including 99 B-line with routeId 6641.
-
+2. The two projects are independent, and the Web UI app is not a prerequisite for the ApiTests project. The test cases in the ApiTests projects are also independent, and can be run in any order.
 
 References
 ----------
