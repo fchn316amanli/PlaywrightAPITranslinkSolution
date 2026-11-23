@@ -16,7 +16,6 @@ public class GtfsApiTests : PlaywrightTest
     private IAPIRequestContext _apiRequestContext = null!;
     private IAPIResponse _response = null!;
     private string _feedUrl = null!;
-    private string requestedRoute = "099";
     private string _internalRouteId = null!;
 
     [SetUp]
@@ -33,10 +32,14 @@ public class GtfsApiTests : PlaywrightTest
         // Read values from the Web UI's appsettings.json
         var baseUrl = _config["ApiSettings:BaseUrl"]
             ?? throw new InvalidOperationException("Error: BaseUrl missing in appsettings.json");
+        var path = _config["ApiSettings:Path"]
+            ?? throw new InvalidOperationException("Error: Path missing in appsettings.json");
         var apiKey = _config["ApiSettings:Api_key"]
             ?? throw new InvalidOperationException("Error: API_Key missing in appsettings.json");
-        _feedUrl = $"{baseUrl}?apikey={Uri.EscapeDataString(apiKey)}";
-  
+        _feedUrl = $"{baseUrl}{path}?apikey={Uri.EscapeDataString(apiKey)}";
+
+        var requestedRoute = _config["Requested:RouteNumber"]
+            ?? throw new InvalidOperationException("Error: Requested RouteNumber missing in appsettings.json");
         _internalRouteId = _config[$"Routes:{requestedRoute}:InternalRouteId"]
             ?? throw new InvalidOperationException($"Error: InternalRouteId for {requestedRoute} missing in appsettings.json");
 

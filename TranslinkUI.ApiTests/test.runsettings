@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<Playwright>
+		<BrowserName>chromium</BrowserName>
+		<!-- Options: chromium, firefox, webkit -->
+		<LaunchOptions>
+			<Headless>false</Headless>
+			<SlowMo>500</SlowMo>
+		</LaunchOptions>
+	</Playwright>
+	<NUnit>
+		<ShadowCopyFiles>false</ShadowCopyFiles>
+	</NUnit>
+</RunSettings>

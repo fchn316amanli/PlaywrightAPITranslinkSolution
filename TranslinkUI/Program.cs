@@ -17,30 +17,34 @@ try
 
     app.MapGet("/", async (IConfiguration config, IHttpClientFactory httpClientFactory) =>
     {
-        string requestedRoute = "099";
-
         // Retrieve the base URL and API key from configuration file appsettings.json
         string? baseUrl = config["ApiSettings:baseUrl"]
             ?? throw new InvalidOperationException("Error: BaseUrl missing in appsettings.json");
+        string? path = config["ApiSettings:Path"]
+            ?? throw new InvalidOperationException("Error: Path missing in appsettings.json");
         string? apiKey = config["ApiSettings:API_key"]
             ?? throw new InvalidOperationException("Error: API_Key missing in appsettings.json");
-        string feedUrl = $"{baseUrl}?apikey={Uri.EscapeDataString(apiKey)}";
+        string feedUrl = $"{baseUrl}{path}?apikey={Uri.EscapeDataString(apiKey)}";
 
         // Retrieve the route name and internal route ID for the required route from configuration
+        string? requestedRoute = config["Requested:RouteNumber"]
+            ?? throw new InvalidOperationException("Error: Requested RouteNumber missing in appsettings.json");
         string? routeName = config[$"Routes:{requestedRoute}:RouteName"];
         string? internalRouteId = config[$"Routes:{requestedRoute}:InternalRouteId"];
 
-        using HttpClient client = new HttpClient();
+        // Use the injected factory and read the stream from the single response
+        using HttpClient client = httpClientFactory.CreateClient();
         using HttpResponseMessage response = await client.GetAsync(
             feedUrl,
             HttpCompletionOption.ResponseHeadersRead
         );
-
         // Handle the response based on the status code
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            // Fetch the raw binary stream
-            using Stream stream = await client.GetStreamAsync(feedUrl);
+            // duplicate call with HttpClient
+            //using Stream stream = await client.GetStreamAsync(feedUrl);
+            //Fetch the raw binary stream
+            using Stream stream = await response.Content.ReadAsStreamAsync();
 
             // Decode the GTFS-Realtime Protocol Buffer message
             FeedMessage feed = Serializer.Deserialize<FeedMessage>(stream);
@@ -169,4 +173,5 @@ catch (Exception ex)
     throw;
 }
 
+// Test projects to reference <Program>
 public partial class Program { }
